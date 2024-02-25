@@ -1,0 +1,101 @@
+# apiVersion: skaffold/v2alpha3
+# kind: Config
+# deploy:
+#   kubectl:
+#     manifests:
+#       - ./infra/k8s/*
+# build:
+#   local:
+#     push: false
+#   artifacts:
+#     - image:  docker.io/shagunsethi/microservices:tagname
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: "src/**/*.ts"
+#             dest: .
+# apiVersion: skaffold/v2alpha3
+# kind: Config
+# deploy:
+#   kubectl:
+#     manifests:
+#       - ./infra/k8s/*
+# build:
+#   local:
+#     push: false
+#   artifacts:
+#     - image: docker.io/shagunsethi/microservices
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: "src/**/*.ts"
+#             dest: .
+# tagPolicy:
+#   gitCommit:
+#     variant: AbbrevCommitSha
+
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
+  artifacts:
+    - image: shagunsethi/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: shagunsethi/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.ts"
+            dest: .
+    - image: shagunsethi/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: shagunsethi/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: shagunsethi/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: shagunsethi/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
